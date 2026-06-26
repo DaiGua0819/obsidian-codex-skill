@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Knowledge Recorder"
+  short_description: "Save learning Q&A notes into Obsidian"
+  default_prompt: "Use $obsidian-qa-recorder to save this knowledge question and final answer into my Obsidian vault."

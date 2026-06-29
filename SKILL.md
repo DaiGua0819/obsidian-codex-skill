@@ -20,8 +20,9 @@ Default target:
 3. Do not record ordinary conversation, Obsidian maintenance, install/setup operations, title renaming requests, file migration, repo publishing, skill updates, thanks, confirmations, or purely administrative messages.
 4. Before sending the final response for a recordable exchange, save the user question and the answer that will be sent.
 5. Summarize a specific `topic` from the answer. Do not use generic titles such as `Claude Q&A`, `Codex Q&A`, `QA`, or `learning note`.
-6. Use `scripts/append_qa_to_obsidian.py` to create the note. Prefer `--input-json` with a UTF-8 JSON file on Windows to avoid quoting and console encoding problems.
-7. Mention the saved standalone note path in the final response only when a note was actually created.
+6. Use the topic as the Obsidian note title and filename without a date prefix. Keep dates only in note metadata and index timestamps.
+7. Use `scripts/append_qa_to_obsidian.py` to create the note. Prefer `--input-json` with a UTF-8 JSON file on Windows to avoid quoting and console encoding problems.
+8. Mention the saved standalone note path in the final response only when a note was actually created.
 
 ## Recordability Examples
 

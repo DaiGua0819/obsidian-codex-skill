@@ -331,11 +331,10 @@ def main() -> int:
 
     vault = Path(args.vault) if args.vault else detect_obsidian_vault()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    date_prefix = timestamp[:10]
     topic = normalize_topic(raw_topic, question, answer)
     target_dir = vault / args.folder
     target_dir.mkdir(parents=True, exist_ok=True)
-    note_path = unique_path(target_dir / f"{sanitize_file_name(date_prefix + ' ' + topic)}.md")
+    note_path = unique_path(target_dir / f"{sanitize_file_name(topic)}.md")
     note_content = build_note_content(question, answer, topic, tags, timestamp)
     index_path = vault / args.index_note
 

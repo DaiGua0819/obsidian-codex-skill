@@ -50,6 +50,8 @@ Codex 技术 QA
 Codex 技术 QA 索引.md
 ```
 
+新建笔记的文件名直接使用整理后的主题标题，例如 `Claude Memory QA - 记忆污染处理流程与例子.md`，不会再自动添加日期前缀。日期会保留在笔记正文的 `Date` 字段和索引时间戳中。
+
 ## 安装到 Codex
 
 可以直接把本仓库安装为 Codex skill，或者复制到本机 Codex skills 目录：

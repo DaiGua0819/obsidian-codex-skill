@@ -41,7 +41,22 @@ C:\Users\24471\Documents\Obsidian Vault
 默认笔记目录：
 
 ```text
-Codex 技术 QA
+Codex 技术 QA/<主题文件夹>
+```
+
+脚本会根据笔记标题自动推断主题文件夹，例如：
+
+```text
+Claude Hook
+Claude Skill
+Claude Memory
+Claude System Prompt
+Claude Error Recovery
+Claude 上下文压缩
+LLM Wiki
+RAG
+飞书邮箱备份
+Codex Skill
 ```
 
 默认索引笔记：

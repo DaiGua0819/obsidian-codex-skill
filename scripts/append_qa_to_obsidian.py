@@ -42,7 +42,8 @@ KNOWLEDGE_MARKERS = (
 LEARNING_SHAPE_MARKERS = (
     "是什么", "为什么", "区别", "机制", "原理", "举例", "例子",
     "怎么实现", "如何判断", "解释", "详细讲", "详细了解", "讲一下",
-    "设计", "流程", "怎么做", "如何做", "最佳实践", "场景", "案例",
+    "设计", "流程", "怎么做", "如何做", "怎么避免", "如何避免",
+    "怎么解决", "如何解决", "怎么处理", "如何处理", "最佳实践", "场景", "案例",
     "what is", "why", "how does", "how to", "explain", "compare",
 )
 ADMIN_MARKERS = (
@@ -228,6 +229,39 @@ def unique_path(path: Path) -> Path:
     raise RuntimeError(f"Could not find unique path for {path}")
 
 
+def infer_subfolder(topic: str) -> str:
+    text = (topic or "").lower()
+    if any(marker in text for marker in ("claude hook", "agent loop", "dispatch")):
+        return "Claude Hook"
+    if "claude skill" in text:
+        return "Claude Skill"
+    if "claude memory" in text:
+        return "Claude Memory"
+    if "claude system prompt" in text:
+        return "Claude System Prompt"
+    if "claude error recovery" in text:
+        return "Claude Error Recovery"
+    if "claude 上下文压缩" in text or "context compact" in text:
+        return "Claude 上下文压缩"
+    if "llm wiki" in text:
+        return "LLM Wiki"
+    if text.startswith("rag ") or text.startswith("rag loop") or " rag " in f" {text} ":
+        return "RAG"
+    if "飞书邮箱备份" in topic:
+        return "飞书邮箱备份"
+    if "codex skill" in text:
+        return "Codex Skill"
+    if "github actions" in text or text.startswith("github "):
+        return "GitHub"
+    if "obsidian" in text:
+        return "Obsidian"
+    if "python" in text:
+        return "Python"
+    if "react" in text:
+        return "React"
+    return "未分类"
+
+
 def build_note_content(question: str, answer: str, topic: str, tags: list[str], timestamp: str) -> str:
     tag_line = " ".join(f"#{tag.strip().replace(' ', '-')}" for tag in tags if tag.strip())
     parts = [
@@ -263,8 +297,11 @@ def ensure_index(index_path: Path) -> None:
 
 def append_index_link(index_path: Path, note_path: Path, title: str, timestamp: str) -> None:
     ensure_index(index_path)
-    stem = note_path.stem
-    line = f"- {timestamp} - [[{stem}|{title}]]\n"
+    try:
+        link_target = note_path.relative_to(index_path.parent).with_suffix("").as_posix()
+    except ValueError:
+        link_target = note_path.stem
+    line = f"- {timestamp} - [[{link_target}|{title}]]\n"
     current = index_path.read_text(encoding="utf-8-sig")
     if line not in current:
         with index_path.open("a", encoding="utf-8", newline="\n") as handle:
@@ -332,7 +369,7 @@ def main() -> int:
     vault = Path(args.vault) if args.vault else detect_obsidian_vault()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     topic = normalize_topic(raw_topic, question, answer)
-    target_dir = vault / args.folder
+    target_dir = vault / args.folder / infer_subfolder(topic)
     target_dir.mkdir(parents=True, exist_ok=True)
     note_path = unique_path(target_dir / f"{sanitize_file_name(topic)}.md")
     note_content = build_note_content(question, answer, topic, tags, timestamp)
